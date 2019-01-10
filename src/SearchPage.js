@@ -10,12 +10,13 @@ class SearchPage extends Component {
 
     searchBook = (e) => {
         const searchText = e.target.value;
-        if (!searchText) {
-            return this.state;
-        }
 
-        BooksAPI.search(searchText).then(response => {
-            console.log(response);
+        if(searchText === ''){
+          this.setState({
+            searchResult: []
+          })
+        } else {
+          BooksAPI.search(searchText).then(response => {
             const resultsWithState = response.error ? response.items : response.map(b => {
                 const exists = this.props.books.find(book => book.id === b.id);
                 exists ? b.shelf=exists.shelf : b.shelf="none";
@@ -25,6 +26,7 @@ class SearchPage extends Component {
                 searchResult: resultsWithState
             })
         })
+        }
     }
 
     render(){
